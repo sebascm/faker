@@ -35,7 +35,8 @@ pipeline {
         }
         stage('Verify') {
             steps {
-                sh 'echo Run Bandit'
+                sh 'pip install bandit'
+                sh 'bandit -ll -r .'
             }
         }
         stage('Deploy') {
