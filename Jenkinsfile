@@ -30,7 +30,7 @@ pipeline {
         }
         stage('Package') {
             steps {
-                sh 'echo Package software'
+                sh 'python setup.py build'
             }
         }
         stage('Verify') {
