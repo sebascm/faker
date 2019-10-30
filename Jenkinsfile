@@ -24,7 +24,7 @@ pipeline {
         }
         stage('Tests') {
             steps {
-                sh 'echo Execute unit and integration tests'
+                sh 'py.test'
             }
         }
         stage('Package') {
