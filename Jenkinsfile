@@ -7,18 +7,11 @@ pipeline {
             }
         }
         stage('Validate') {
-        parallel {
-            stage('style_checker') {
-                steps {
-                    sh 'echo Validate Code 1'
-                }
+            steps {
+                sh 'pip install flake8'
+		sh 'flake8'
+                sh 'flake8 --select=DUO'
             }
-            stage('static_analysis') {
-                steps {
-                    sh 'echo Validate Code 2'
-                }
-            }
-        }
         }
         stage('Build') {
             steps {
