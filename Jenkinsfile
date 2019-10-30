@@ -15,7 +15,11 @@ pipeline {
         }
         stage('Build') {
             steps {
-                sh 'echo Build'
+                sh 'pip install .'
+                sh 'pip install freezegun'
+                sh 'pip install validators'
+                sh 'pip install ukpostcodeparser'
+                sh 'pip install random2'
             }
         }
         stage('Tests') {
