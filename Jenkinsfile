@@ -20,6 +20,7 @@ pipeline {
                 sh 'pip install validators'
                 sh 'pip install ukpostcodeparser'
                 sh 'pip install random2'
+		sh 'pip install pytest'
             }
         }
         stage('Tests') {
