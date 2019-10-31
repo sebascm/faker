@@ -32,12 +32,12 @@ pipeline {
         stage('Deploy') {
             steps {
                 sh 'tar -cvzf build.tar.gz build/'
-                sh 'tar -cvzf reports.tar.gz reports/'
             }
         }
     }
     post {
         always {
+            sh 'tar -cvzf reports.tar.gz reports/'
             archiveArtifacts 'reports.tar.gz'
             archiveArtifacts artifacts: 'build.tar.gz', onlyIfSuccessful: true
             cleanWs()
