@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('Setup Workspace') {
             steps {
-                sh 'echo Configure workspace'
+                sh 'mkdir reports'
             }
         }
         stage('Validate') {
