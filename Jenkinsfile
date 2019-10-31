@@ -13,19 +13,9 @@ pipeline {
                 sh 'flake8 --select=DUO > reports/dlint.txt'
             }
         }
-        stage('Build') {
+         stage('Tests') {
             steps {
-                sh 'pip install .'
-                sh 'pip install freezegun'
-                sh 'pip install validators'
-                sh 'pip install ukpostcodeparser'
-                sh 'pip install random2'
-                sh 'pip install pytest'
-            }
-        }
-        stage('Tests') {
-            steps {
-                sh 'py.test -rA > reports/tests.txt'
+                sh 'python setup.py test > reports/tests.txt'
             }
         }
         stage('Package') {
@@ -36,18 +26,18 @@ pipeline {
         stage('Verify') {
             steps {
                 sh 'pip install bandit'
-                sh 'bandit -lll -s B303 -r . -o "reports/bandit.txt"'
+                sh 'bandit -lll -s B303,B605,B602 -r ."reports/bandit.txt"'
             }
         }
         stage('Deploy') {
             steps {
                 sh 'tar -cvzf build.tar.gz build/'
+                sh 'tar -cvzf reports.tar.gz reports/'
             }
         }
     }
     post {
         always {
-            sh 'tar -cvzf reports.tar.gz reports/'
             archiveArtifacts 'reports.tar.gz'
             archiveArtifacts artifacts: 'build.tar.gz', onlyIfSuccessful: true
             cleanWs()
