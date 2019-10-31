@@ -26,7 +26,7 @@ pipeline {
         stage('Verify') {
             steps {
                 sh 'pip install bandit'
-                sh 'bandit -lll -s B303,B605,B602 -r ."reports/bandit.txt"'
+                sh 'bandit -lll -s B303,B605,B602 -r . -o "reports/bandit.txt"'
             }
         }
         stage('Deploy') {
