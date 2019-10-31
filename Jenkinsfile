@@ -9,7 +9,7 @@ pipeline {
         stage('Validate') {
             steps {
                 sh 'pip install flake8'
-		sh 'flake8'
+                sh 'flake8'
                 sh 'flake8 --select=DUO'
             }
         }
@@ -20,7 +20,7 @@ pipeline {
                 sh 'pip install validators'
                 sh 'pip install ukpostcodeparser'
                 sh 'pip install random2'
-		sh 'pip install pytest'
+                sh 'pip install pytest'
             }
         }
         stage('Tests') {
@@ -35,7 +35,8 @@ pipeline {
         }
         stage('Verify') {
             steps {
-                sh 'echo Run Bandit'
+                sh 'pip install bandit'
+                sh 'bandit -lll -s B303 -r .'
             }
         }
         stage('Deploy') {
