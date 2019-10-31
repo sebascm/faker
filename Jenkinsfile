@@ -9,8 +9,8 @@ pipeline {
         stage('Validate') {
             steps {
                 sh 'pip install flake8'
-                sh 'flake8'
-                sh 'flake8 --select=DUO'
+                sh 'flake8 > reports/flake8.txt'
+                sh 'flake8 --select=DUO > reports/dlint.txt'
             }
         }
         stage('Build') {
@@ -25,7 +25,7 @@ pipeline {
         }
         stage('Tests') {
             steps {
-                sh 'py.test'
+                sh 'py.test -rA > reports/tests.txt'
             }
         }
         stage('Package') {
@@ -36,17 +36,20 @@ pipeline {
         stage('Verify') {
             steps {
                 sh 'pip install bandit'
-                sh 'bandit -lll -s B303 -r .'
+                sh 'bandit -lll -s B303 -r . -o "reports/bandit.txt"'
             }
         }
         stage('Deploy') {
             steps {
-                sh 'echo Deploy'
+                sh 'tar -cvzf build.tar.gz build/'
+                sh 'tar -cvzf reports.tar.gz reports/'
             }
         }
     }
     post {
         always {
+            archiveArtifacts 'reports.tar.gz'
+            archiveArtifacts artifacts: 'build.tar.gz', onlyIfSuccessful: true
             cleanWs()
         }
     }
