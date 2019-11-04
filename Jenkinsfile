@@ -15,7 +15,7 @@ pipeline {
         }
          stage('Tests') {
             steps {
-                sh 'python setup.py test > reports/tests.txt'
+                sh 'python setup.py test -q > reports/tests.txt'
             }
         }
         stage('Package') {
@@ -36,7 +36,7 @@ pipeline {
         }
         stage ('Benchmark'){
             steps {
-                sh 'sh tests/benchmarks/benchmark.sh >> reports/benchmarks.txt'
+                sh 'bash tests/benchmarks/benchmark.sh >> reports/benchmarks.txt'
             }
         }
     }
