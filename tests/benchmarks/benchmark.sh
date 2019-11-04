@@ -7,7 +7,7 @@ total=0
 while [ $i -lt 5 ]
 do
     start=`date +%s`
-    python setup.py test
+    python setup.py test 2>&1 >/dev/null
     end=`date +%s`
     runtime=$((end-start))
     total=$((total+runtime))

@@ -15,7 +15,7 @@ pipeline {
         }
          stage('Tests') {
             steps {
-                sh 'python setup.py test -q > reports/tests.txt'
+                sh 'python setup.py test > reports/tests.txt'
             }
         }
         stage('Package') {
