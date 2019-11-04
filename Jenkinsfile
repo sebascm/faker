@@ -34,6 +34,11 @@ pipeline {
                 sh 'tar -cvzf build.tar.gz build/'
             }
         }
+        stage ('Benchmark'){
+            steps {
+                sh 'sh tests/benchmarks/benchmark.sh >> reports/benchmarks.txt'
+            }
+        }
     }
     post {
         always {
