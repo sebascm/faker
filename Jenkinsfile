@@ -44,7 +44,8 @@ pipeline {
         always {
             sh 'tar -cvzf reports.tar.gz reports/'
             archiveArtifacts 'reports.tar.gz'
-            archiveArtifacts artifacts: 'build.tar.gz', onlyIfSuccessful: true
+            archiveArtifacts artifacts: 'build.tar.gz', onlyIfSuccessful: true 
+            emailext body: 'A Test EMail', recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']], subject: 'Test'}
             cleanWs()
         }
     }
