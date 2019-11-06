@@ -46,7 +46,7 @@ pipeline {
             archiveArtifacts 'reports.tar.gz'
             archiveArtifacts artifacts: 'build.tar.gz', onlyIfSuccessful: true
             cleanWs()
-            mail bcc: '', body: "<b>Example</b><br>Project: A <br>Build Number: B <br> URL de build: C", cc: '', charset: 'UTF-8', from: 'notificaciones.torusnewies@gmail.com', mimeType: 'text/html', replyTo: '', subject: "ERROR CI: Project name -> D", to: "notificaciones.torusnewies@gmail.com";  
-        }
+            emailext body: 'A Test EMail', recipientProviders: 'notificaciones.torusnewies@gmail.com', 'notificaciones.torusnewies@gmail.com', subject: 'Test'
+    }        }
     }
 }
