@@ -47,6 +47,6 @@ pipeline {
             archiveArtifacts artifacts: 'build.tar.gz', onlyIfSuccessful: true
             cleanWs()
             emailext body: 'A Test EMail', recipientProviders: 'notificaciones.torusnewies@gmail.com', 'notificaciones.torusnewies@gmail.com', subject: 'Test'
-    }        }
+    }
     }
 }
