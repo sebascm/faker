@@ -1,11 +1,6 @@
 pipeline {
     agent { docker { image 'python' } }
     stages {
-        stage('Setup Workspace') {
-            steps {
-
-            }
-        }
         stage('Validate') {
             steps {
                 sh 'pip install flake8'
