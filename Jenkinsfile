@@ -44,9 +44,9 @@ pipeline {
         always {
             sh 'tar -cvzf reports.tar.gz reports/'
             archiveArtifacts 'reports.tar.gz'
-            archiveArtifacts artifacts: 'build.tar.gz', onlyIfSuccessful: true 
-            mail bcc: '', body: "<b>Example</b><br>Project: A <br>Build Number: B <br> URL de build: C", cc: '', charset: 'UTF-8', from: 'notificaciones.torusnewies@gmail.com', mimeType: 'text/html', replyTo: '', subject: "ERROR CI: Project name -> D", to: "notificaciones.torusnewies@gmail.com";  
+            archiveArtifacts artifacts: 'build.tar.gz', onlyIfSuccessful: true
             cleanWs()
+            mail bcc: '', body: "<b>Example</b><br>Project: A <br>Build Number: B <br> URL de build: C", cc: '', charset: 'UTF-8', from: 'notificaciones.torusnewies@gmail.com', mimeType: 'text/html', replyTo: '', subject: "ERROR CI: Project name -> D", to: "notificaciones.torusnewies@gmail.com";  
         }
     }
 }
