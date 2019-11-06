@@ -46,7 +46,12 @@ pipeline {
             archiveArtifacts 'reports.tar.gz'
             archiveArtifacts artifacts: 'build.tar.gz', onlyIfSuccessful: true
             cleanWs()
-            emailext body: 'A Test EMail', recipientProviders: 'notificaciones.torusnewies@gmail.com', 'notificaciones.torusnewies@gmail.com', subject: 'Test'
-    }
+            emailext (
+                subject: "STARTED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+                body: """<p>STARTED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
+                    <p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>""",
+                recipientProviders: 'notificaciones.torusnewies@gmail.com'
+            )    
+            }
     }
 }
