@@ -41,11 +41,24 @@ pipeline {
         }
     }
     post {
-        always {
+        success {
             sh 'tar -cvzf reports.tar.gz reports/'
             archiveArtifacts 'reports.tar.gz'
-            archiveArtifacts artifacts: 'build.tar.gz', onlyIfSuccessful: true
-            cleanWs()
+            archiveArtifacts artifacts: 'build.tar.gz'
+        }
+        failure {
+            sh 'tar -cvzf reports.tar.gz reports/'
+            archiveArtifacts 'reports.tar.gz'
+            emailext (
+                attachmentsPattern: 'reports.tar.gz',
+                subject: "Failure: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+                from: 'notificaciones.torusnewies@gmail.com',
+                to: 'sebastiancalvom@gmail.com',
+                body: "Check attached reports"
+            )
+        }
+        cleanup {
+            deleteDir()       
         }
     }
 }
