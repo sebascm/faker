@@ -51,7 +51,7 @@ pipeline {
                 attachmentsPattern: 'reports.tar.gz',
                 subject: "[JENKINS] Job '${env.JOB_NAME} execution result'",
                 from: 'notificaciones.torusnewies@gmail.com',
-                to: 'fran.rua@torusware.com',
+                to: 'sebastiancalvom@gmail.com',
                 body: " Job: '${env.JOB_NAME} \n\tBuild: [${env.BUILD_NUMBER}] \n\tStatus: ${currentBuild.currentResult}"
             )
 				}
