@@ -45,6 +45,13 @@ pipeline {
             sh 'tar -cvzf reports.tar.gz reports/'
             archiveArtifacts 'reports.tar.gz'
             archiveArtifacts artifacts: 'build.tar.gz'
+            emailext (
+                attachmentsPattern: 'reports.tar.gz',
+                subject: "Success: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+                from: 'notificaciones.torusnewies@gmail.com',
+                to: 'sebastiancalvom@gmail.com',
+                body: "Check attached reports"
+            )
         }
         failure {
             sh 'tar -cvzf reports.tar.gz reports/'
