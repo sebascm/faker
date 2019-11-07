@@ -52,6 +52,19 @@ pipeline {
                 to: 'sebastiancalvom@gmail.com',
                 body: "Check attached reports"
             )
+            script{
+            if (env.BRANCH_NAME.startsWith('PR')){
+              withCredentials([usernamePassword(credentialsId: 'SebasGH', passwordVariable: 'pass', usernameVariable: 'user')]) {
+            sh "git remote update"
+            sh "git fetch --all"
+            sh "git pull --all"
+            sh "git checkout origin/dev"
+            sh "git merge origin/master"
+            sh "git merge ${BRANCH_NAME}"
+            sh "git push https://$user:$pass@github.com/sebascm/faker/"
+          }
+        }
+      }
         }
         failure {
             sh 'tar -cvzf reports.tar.gz reports/'
