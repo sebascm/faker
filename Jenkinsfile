@@ -41,20 +41,22 @@ pipeline {
         }
     }
     post {
-        always {
+        success {
+            archiveArtifacts artifacts: 'build.tar.gz'
+        }
+        failure {
             sh 'tar -cvzf reports.tar.gz reports/'
             archiveArtifacts 'reports.tar.gz'
-            archiveArtifacts artifacts: 'build.tar.gz', onlyIfSuccessful: true
             emailext (
                 attachmentsPattern: 'reports.tar.gz',
-                subject: "STARTED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+                subject: "Failure: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
                 from: 'notificaciones.torusnewies@gmail.com',
                 to: 'sebastiancalvom@gmail.com',
-                body: """<p>STARTED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
-                    <p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>""",
-                recipientProviders: [[$class: 'DevelopersRecipientProvider']]
+                body: "Check attached reports"
             )
+        }
+        always {
             cleanWs()             
-            }
+        }
     }
 }
