@@ -57,7 +57,7 @@ pipeline {
                 body: "Check attached reports"
             )
         }
-        always {
+        cleanup {
             deleteDir()       
         }
     }
