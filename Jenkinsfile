@@ -42,6 +42,8 @@ pipeline {
     }
     post {
         success {
+            sh 'tar -cvzf reports.tar.gz reports/'
+            archiveArtifacts 'reports.tar.gz'
             archiveArtifacts artifacts: 'build.tar.gz'
         }
         failure {
@@ -56,7 +58,7 @@ pipeline {
             )
         }
         always {
-            cleanWs()             
+            deleteDir()       
         }
     }
 }
