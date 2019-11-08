@@ -1,19 +1,19 @@
 pipeline {
-    agent { docker { image 'python' } }
+    agent { docker { image 'python:3.7-alpine3.9' } }
     stages {
         stage('Setup Workspace') {
             steps {
                 sh 'mkdir reports'
+								sh 'pip install flake8 bandit'
             }
         }
         stage('Validate') {
             steps {
-                sh 'pip install flake8'
                 sh 'flake8 > reports/flake8.txt'
                 sh 'flake8 --select=DUO > reports/dlint.txt'
             }
         }
-         stage('Tests') {
+        stage('Tests') {
             steps {
                 sh 'python setup.py test > reports/tests.txt'
             }
@@ -25,7 +25,6 @@ pipeline {
         }
         stage('Verify') {
             steps {
-                sh 'pip install bandit'
                 sh 'bandit -lll -s B303,B605,B602 -r . -o "reports/bandit.txt"'
             }
         }
@@ -65,7 +64,7 @@ pipeline {
             )
         }
         cleanup {
-            deleteDir()       
+            cleanWs()
         }
     }
 }
