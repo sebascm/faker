@@ -41,44 +41,36 @@ pipeline {
         }
     }
     post {
-        success {
+		success{
+			archiveArtifacts artifacts: 'build.tar.gz'
             sh 'tar -cvzf reports.tar.gz reports/'
             archiveArtifacts 'reports.tar.gz'
-            archiveArtifacts artifacts: 'build.tar.gz'
-            emailext (
-                attachmentsPattern: 'reports.tar.gz',
-                subject: "Success: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
-                from: 'notificaciones.torusnewies@gmail.com',
-                to: 'sebastiancalvom@gmail.com',
-                body: "Check attached reports"
-            )
-            script{
             if (env.BRANCH_NAME.startsWith('PR')){
               withCredentials([usernamePassword(credentialsId: 'SebasGH', passwordVariable: 'pass', usernameVariable: 'user')]) {
-            sh "git remote update"
-            sh "git fetch --all"
-            sh "git pull --all"
-            sh "git checkout origin/dev"
-            sh "git merge origin/master"
-            sh "git merge ${BRANCH_NAME}"
-            sh "git push https://$user:$pass@github.com/sebascm/faker/"
-          }
-        }
-      }
-        }
-        failure {
-            sh 'tar -cvzf reports.tar.gz reports/'
+                sh "git config --global user.email 'sebastiancalvom@gmail.com'"
+                sh "git config --global user.name 'Sebas'"
+                sh "git remote update"
+                sh "git fetch --all"
+                sh "git pull --all"
+                sh "git checkout origin/dev"
+                sh "git merge origin/master"
+                sh "git merge ${BRANCH_NAME}"
+                sh "git push https://$user:$pass@github.com/sebascm/faker/"
+            }
+		}
+		always {
+			sh 'tar -cvzf reports.tar.gz reports/'
             archiveArtifacts 'reports.tar.gz'
             emailext (
                 attachmentsPattern: 'reports.tar.gz',
-                subject: "Failure: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+                subject: "[JENKINS] Job '${env.JOB_NAME} execution result'",
                 from: 'notificaciones.torusnewies@gmail.com',
                 to: 'sebastiancalvom@gmail.com',
-                body: "Check attached reports"
+                body: " Job: '${env.JOB_NAME} \n\tBuild: [${env.BUILD_NUMBER}] \n\tStatus: ${currentBuild.currentResult}"
             )
-        }
+		}
         cleanup {
-            deleteDir()       
+            cleanWs()       
         }
     }
 }
