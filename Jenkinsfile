@@ -41,29 +41,20 @@ pipeline {
         }
     }
     post {
-        success {
-            sh 'tar -cvzf reports.tar.gz reports/'
-            archiveArtifacts 'reports.tar.gz'
-            archiveArtifacts artifacts: 'build.tar.gz'
-            emailext (
-                attachmentsPattern: 'reports.tar.gz',
-                subject: "Success: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
-                from: 'notificaciones.torusnewies@gmail.com',
-                to: 'sebastiancalvom@gmail.com',
-                body: "Check attached reports"
-            )
-        }
-        failure {
-            sh 'tar -cvzf reports.tar.gz reports/'
+				success{
+						archiveArtifacts artifacts: 'build.tar.gz'
+				}
+				always {
+						sh 'tar -cvzf reports.tar.gz reports/'
             archiveArtifacts 'reports.tar.gz'
             emailext (
                 attachmentsPattern: 'reports.tar.gz',
-                subject: "Failure: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+                subject: "[JENKINS] Job '${env.JOB_NAME} execution result'",
                 from: 'notificaciones.torusnewies@gmail.com',
                 to: 'sebastiancalvom@gmail.com',
-                body: "Check attached reports"
+                body: " Job: '${env.JOB_NAME} \n\tBuild: [${env.BUILD_NUMBER}] \n\tStatus: ${currentBuild.currentResult}"
             )
-        }
+				}
         cleanup {
             deleteDir()       
         }
