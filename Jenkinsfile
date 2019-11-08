@@ -48,14 +48,14 @@ pipeline {
                 if (env.BRANCH_NAME.startsWith('PR')){
                     withCredentials([usernamePassword(credentialsId: 'SebasGH', passwordVariable: 'pass', usernameVariable: 'user')]) {
                         sh "git config --global user.email 'sebastiancalvom@gmail.com'"
-                        sh "git config --global user.name 'Sebas'"
+                        sh "git config --global user.name 'Sebas Calvo'" //may be are multiple sebas in a development team
                         sh "git remote update"
                         sh "git fetch --all"
                         sh "git pull --all"
-                        sh "git checkout origin/dev"
+                        sh "git checkout dev"
                         sh "git merge origin/master"
                         sh "git merge ${BRANCH_NAME}"
-                        sh "git push https://$user:$pass@github.com/sebascm/faker/ HEAD:origin/dev"
+                        sh "git push https://$user:$pass@github.com/sebascm/faker/"
                     }
                 }
             }
