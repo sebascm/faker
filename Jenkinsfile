@@ -4,7 +4,7 @@ pipeline {
         stage('Setup Workspace') {
             steps {
                 sh 'mkdir reports'
-								sh 'pip install flake8 bandit'
+                sh 'pip install flake8 bandit'
             }
         }
         stage('Validate') {
@@ -35,7 +35,7 @@ pipeline {
         }
         stage ('Benchmark'){
             steps {
-								sh 'time python setup.py test &> /dev/null'
+                sh 'time python setup.py test &> /dev/null'
             }
         }
     }
