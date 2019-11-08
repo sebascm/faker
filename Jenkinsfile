@@ -58,6 +58,7 @@ pipeline {
                 sh "git push https://$user:$pass@github.com/sebascm/faker/"
             }
 		}
+        }
 		always {
 			sh 'tar -cvzf reports.tar.gz reports/'
             archiveArtifacts 'reports.tar.gz'
