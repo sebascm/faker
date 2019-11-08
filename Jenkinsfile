@@ -36,7 +36,7 @@ pipeline {
         }
         stage ('Benchmark'){
             steps {
-                sh 'curl -o benchmark.sh -s https://gist.github.com/sebascm/c56b26bc24d8964c005cfae95c853e5c'
+                sh 'curl -o benchmark.sh -s https://gist.github.com/sebascm/c56b26bc24d8964c005cfae95c853e5c/raw/benchmark.sh'
                 sh 'bash benchmark.sh >> reports/benchmarks.txt'
             }
         }
