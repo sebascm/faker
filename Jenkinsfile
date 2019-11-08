@@ -56,7 +56,7 @@ pipeline {
                     sh "git checkout origin/dev"
                     sh "git merge origin/master"
                     sh "git merge ${BRANCH_NAME}"
-                    sh "git push https://$user:$pass@github.com/sebascm/faker/"
+                    sh "git push https://$user:$pass@github.com/sebascm/faker/ HEAD:origin/dev"
                   }
 		        }
             }
