@@ -45,19 +45,21 @@ pipeline {
 			archiveArtifacts artifacts: 'build.tar.gz'
             sh 'tar -cvzf reports.tar.gz reports/'
             archiveArtifacts 'reports.tar.gz'
-            if (env.BRANCH_NAME.startsWith('PR')){
-              withCredentials([usernamePassword(credentialsId: 'SebasGH', passwordVariable: 'pass', usernameVariable: 'user')]) {
-                sh "git config --global user.email 'sebastiancalvom@gmail.com'"
-                sh "git config --global user.name 'Sebas'"
-                sh "git remote update"
-                sh "git fetch --all"
-                sh "git pull --all"
-                sh "git checkout origin/dev"
-                sh "git merge origin/master"
-                sh "git merge ${BRANCH_NAME}"
-                sh "git push https://$user:$pass@github.com/sebascm/faker/"
+            script{
+                if (env.BRANCH_NAME.startsWith('PR')){
+                  withCredentials([usernamePassword(credentialsId: 'SebasGH', passwordVariable: 'pass', usernameVariable: 'user')]) {
+                    sh "git config --global user.email 'sebastiancalvom@gmail.com'"
+                    sh "git config --global user.name 'Sebas'"
+                    sh "git remote update"
+                    sh "git fetch --all"
+                    sh "git pull --all"
+                    sh "git checkout origin/dev"
+                    sh "git merge origin/master"
+                    sh "git merge ${BRANCH_NAME}"
+                    sh "git push https://$user:$pass@github.com/sebascm/faker/"
+                  }
+		        }
             }
-		}
         }
 		always {
 			sh 'tar -cvzf reports.tar.gz reports/'
