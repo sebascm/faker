@@ -13,7 +13,7 @@ pipeline {
                 sh 'flake8 --select=DUO > reports/dlint.txt'
             }
         }
-         stage('Tests') {
+        stage('Tests') {
             steps {
                 sh 'python setup.py test > reports/tests.txt'
             }
@@ -36,16 +36,34 @@ pipeline {
         }
         stage ('Benchmark'){
             steps {
-                sh 'bash tests/benchmarks/benchmark.sh >> reports/benchmarks.txt'
+                sh 'curl -o benchmark.sh -s https://gist.githubusercontent.com/sebascm/c56b26bc24d8964c005cfae95c853e5c/raw/f4cfd88af7049acaff89d2ef68ae5d40f666ee46/benchmark.sh'
+                sh 'bash benchmark.sh >> reports/benchmarks.txt'
             }
         }
-    }
+    }  
     post {
-				success{
-						archiveArtifacts artifacts: 'build.tar.gz'
-				}
-				always {
-						sh 'tar -cvzf reports.tar.gz reports/'
+        success{
+            archiveArtifacts artifacts: 'build.tar.gz'
+            sh 'tar -cvzf reports.tar.gz reports/'
+            archiveArtifacts 'reports.tar.gz'
+            script{
+                if (env.BRANCH_NAME.startsWith('PR')){
+                    withCredentials([usernamePassword(credentialsId: 'SebasGH', passwordVariable: 'pass', usernameVariable: 'user')]) {
+                        sh "git config --global user.email 'sebastiancalvom@gmail.com'"
+                        sh "git config --global user.name 'Sebas'"
+                        sh "git remote update"
+                        sh "git fetch --all"
+                        sh "git pull --all"
+                        sh "git checkout origin/dev"
+                        sh "git merge origin/master"
+                        sh "git merge ${BRANCH_NAME}"
+                        sh "git push https://$user:$pass@github.com/sebascm/faker/ HEAD:origin/dev"
+                    }
+                }
+            }
+        }
+        always {
+            sh 'tar -cvzf reports.tar.gz reports/'
             archiveArtifacts 'reports.tar.gz'
             emailext (
                 attachmentsPattern: 'reports.tar.gz',
@@ -54,9 +72,9 @@ pipeline {
                 to: 'sebastiancalvom@gmail.com',
                 body: " Job: '${env.JOB_NAME} \n\tBuild: [${env.BUILD_NUMBER}] \n\tStatus: ${currentBuild.currentResult}"
             )
-				}
+        }
         cleanup {
-            deleteDir()       
+            cleanWs()       
         }
     }
 }
