@@ -13,7 +13,7 @@ pipeline {
                 sh 'flake8 --select=DUO > reports/dlint.txt'
             }
         }
-         stage('Tests') {
+        stage('Tests') {
             steps {
                 sh 'python setup.py test > reports/tests.txt'
             }
@@ -41,28 +41,28 @@ pipeline {
         }
     }
     post {
-		success{
-			archiveArtifacts artifacts: 'build.tar.gz'
+				success{
+						archiveArtifacts artifacts: 'build.tar.gz'
             sh 'tar -cvzf reports.tar.gz reports/'
             archiveArtifacts 'reports.tar.gz'
             script{
                 if (env.BRANCH_NAME.startsWith('PR')){
-                  withCredentials([usernamePassword(credentialsId: 'SebasGH', passwordVariable: 'pass', usernameVariable: 'user')]) {
-                    sh "git config --global user.email 'sebastiancalvom@gmail.com'"
-                    sh "git config --global user.name 'Sebas'"
-                    sh "git remote update"
-                    sh "git fetch --all"
-                    sh "git pull --all"
-                    sh "git checkout origin/dev"
-                    sh "git merge origin/master"
-                    sh "git merge ${BRANCH_NAME}"
-                    sh "git push https://$user:$pass@github.com/sebascm/faker/ HEAD:origin/dev"
-                  }
-		        }
+										withCredentials([usernamePassword(credentialsId: 'SebasGH', passwordVariable: 'pass', usernameVariable: 'user')]) {
+												sh "git config --global user.email 'sebastiancalvom@gmail.com'"
+												sh "git config --global user.name 'Sebas'"
+												sh "git remote update"
+												sh "git fetch --all"
+												sh "git pull --all"
+												sh "git checkout origin/dev"
+												sh "git merge origin/master"
+												sh "git merge ${BRANCH_NAME}"
+												sh "git push https://$user:$pass@github.com/sebascm/faker/ HEAD:origin/dev"
+										}
+								}
             }
         }
-		always {
-			sh 'tar -cvzf reports.tar.gz reports/'
+				always {
+						sh 'tar -cvzf reports.tar.gz reports/'
             archiveArtifacts 'reports.tar.gz'
             emailext (
                 attachmentsPattern: 'reports.tar.gz',
@@ -71,7 +71,7 @@ pipeline {
                 to: 'sebastiancalvom@gmail.com',
                 body: " Job: '${env.JOB_NAME} \n\tBuild: [${env.BUILD_NUMBER}] \n\tStatus: ${currentBuild.currentResult}"
             )
-		}
+				}
         cleanup {
             cleanWs()       
         }
